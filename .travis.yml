@@ -1,3 +1,19 @@
 language: C
 
-script: make hello-coverity
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "Y9ZbQivUAjYt+wsz3Mdu4qRpJ94dLqJSraF2mzuFshxlUVaOtyzR/BHRcLiY9SRoGBZHM7LRVvjcfZrSL5TJUPypxHy5TPC9WB0+EtX6U1NBkUbq0NBHykqGwrBSPGCahb9bVi9f7BIpYXq5MUFRE9Q7VB+9XYsVNl0gOFKAn1HqQl8YChXO9nyQ0+ZsOK6pvYu8OGQv9Ue/e9FXlJCIFZQyHgerjifeWTfWGmf4hqyyuOmRRsqoZd8HkAUDTMQijCdaahdT5MMxpVQ3DJ5t4IKC0gA0s6Xg2jPhxGL/3AEGMIP3VU0nfINvpQzst8gOhFhM7OXpEGMykcfGDdoin2kSeG1jUs8qdgDn/LN25+qUwH3qSALldqyoH0geXZPSGrRd6Fjz1jbwaOWfVLXvwelkrJi7vRWhcxZxhzfGEZ+1mGn7t0ELMrHHlsyw2LA6QHBWunNZGuW0IKLMUBVH8LTD+a/NnQBMES43hHa20CUWG7qprloMjgbvtizCGgP0eGrz1UrAzYnX+RP2Xy38EwnYVzwPjk8xTb9X0/O+lrBn2EwKJFmHLG/5tnx7eXnRKVHVIMQc9khmNyqJPE9gH0twCXWkFTM+gbgpzvM0RGXCWBqwsHgPncbmCMq8ydwZh+plva43yLzQf2bPnqy8vsAse5UnRflCDcHkyrJj2x4="
+
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "paraschetal/coverity-test-repo"
+      description: "To test github ant travis ci integration with coverity scan"
+    notification_email: paras.chetal@gmail.com
+    build_command:   "make hello-coverity"
+    branch_pattern: coverity_scan
